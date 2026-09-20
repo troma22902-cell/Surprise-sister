@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Для тебя</title>
+  <meta name="theme-color" content="#6b4eff" />
+  <meta property="og:title" content="Небольшой сюрприз" />
+  <meta property="og:description" content="Открой, когда будет минутка ✨" />
+  <meta property="og:type" content="website" />
+  <style>
+    :root{
+      --bg1:#17122c;
+      --bg2:#2c1e55;
+      --card:#ffffff;
+      --text:#2a2440;
+      --muted:#756f86;
+      --accent:#7557ff;
+      --accent2:#e45bb5;
+      --soft:#f3efff;
+      --gold:#f1b84a;
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      min-height:100%;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(228,91,181,.24), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(117,87,255,.26), transparent 28%),
+        linear-gradient(145deg,var(--bg1),var(--bg2));
+    }
+
+    body{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      overflow-x:hidden;
+      padding:22px;
+    }
+
+    .sparkles{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+
+    .sparkles span{
+      position:absolute;
+      opacity:.25;
+      font-size:22px;
+      animation:float 8s ease-in-out infinite;
+    }
+
+    .sparkles span:nth-child(1){left:8%;top:15%;animation-delay:0s}
+    .sparkles span:nth-child(2){left:80%;top:12%;animation-delay:1s}
+    .sparkles span:nth-child(3){left:16%;top:72%;animation-delay:2s}
+    .sparkles span:nth-child(4){left:88%;top:70%;animation-delay:3s}
+    .sparkles span:nth-child(5){left:48%;top:8%;animation-delay:4s}
+
+    @keyframes float{
+      0%,100%{transform:translateY(0) rotate(0)}
+      50%{transform:translateY(-16px) rotate(10deg)}
+    }
+
+    .card{
+      width:min(94vw,580px);
+      background:rgba(255,255,255,.97);
+      border-radius:28px;
+      padding:30px;
+      box-shadow:0 28px 90px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+      z-index:2;
+    }
+
+    .card:before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:6px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    }
+
+    h1,h2,h3{margin:.1em 0 .45em}
+    h1{font-size:clamp(30px,8vw,48px);line-height:1.02}
+    h2{font-size:clamp(24px,6vw,34px)}
+    h3{font-size:18px}
+    p{line-height:1.55}
+    .muted{color:var(--muted)}
+
+    .badge{
+      display:inline-block;
+      background:var(--soft);
+      color:var(--accent);
+      border:1px solid #e2dafe;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
+
+    .badge.secret{
+      background:#fff7df;
+      color:#8d6515;
+      border-color:#f3dda6;
+    }
+
+    button{
+      width:100%;
+      border:0;
+      border-radius:15px;
+      padding:15px 17px;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:12px;
+      transition:.2s transform,.2s opacity,.2s box-shadow;
+    }
+
+    button:active{transform:scale(.985)}
+    button:hover{box-shadow:0 8px 20px rgba(117,87,255,.16)}
+
+    .primary{
+      color:white;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    }
+
+    .secondary{
+      background:#f1eef9;
+      color:#40365d;
+    }
+
+    .mystery{
+      background:#fff7df;
+      color:#775414;
+      border:1px solid #f1d896;
+    }
+
+    .hidden{display:none!important}
+
+    .progress{
+      height:12px;
+      background:#eeeaf7;
+      border-radius:999px;
+      overflow:hidden;
+      margin:20px 0 10px;
+    }
+
+    .bar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .35s ease;
+    }
+
+    .percent{text-align:right;font-size:13px;color:var(--muted)}
+
+    .stat{
+      margin:18px 0;
+      opacity:0;
+      transform:translateY(9px);
+      animation:show .45s ease forwards;
+    }
+
+    @keyframes show{to{opacity:1;transform:none}}
+
+    .statHead{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-weight:700;
+      margin-bottom:7px;
+    }
+
+    .track{
+      height:9px;
+      background:#eeeaf6;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .fill{
+      height:100%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      border-radius:999px;
+      animation:grow .8s ease forwards;
+      transform-origin:left;
+    }
+
+    @keyframes grow{
+      from{transform:scaleX(0)}
+      to{transform:scaleX(1)}
+    }
+
+    .secretBox{
+      margin-top:20px;
+      padding:16px;
+      background:#fff6fb;
+      border:1px dashed #eba4cf;
+      border-radius:16px;
+      color:#6a3555;
+    }
+
+    .result{
+      margin-top:18px;
+      background:linear-gradient(145deg,#f7f4ff,#fff6fb);
+      border:1px solid #e8e0fb;
+      border-radius:20px;
+      padding:20px;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      padding:10px 0;
+      border-bottom:1px solid #e9e4f2;
+    }
+
+    .row:last-child{border-bottom:0}
+    .row span:first-child{color:var(--muted)}
+    .row span:last-child{font-weight:800;text-align:right}
+
+    .note{
+      margin-top:18px;
+      padding:15px;
+      border-radius:16px;
+      background:#f1edff;
+      color:#4b3f78;
+      font-weight:650;
+      line-height:1.5;
+    }
+
+    .extra{
+      margin-top:14px;
+      min-height:58px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:#5a5075;
+      font-weight:700;
+      padding:12px;
+    }
+
+    .achievements{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .achievement{
+      background:#faf8ff;
+      border:1px solid #e7e1f5;
+      border-radius:15px;
+      padding:12px;
+      min-height:88px;
+    }
+
+    .achievement strong{
+      display:block;
+      font-size:14px;
+      margin-bottom:4px;
+    }
+
+    .achievement span{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    .thought{
+      margin-top:12px;
+      padding:16px;
+      border-radius:16px;
+      background:#fffaf0;
+      border:1px solid #f3dfad;
+      color:#6e541e;
+      font-weight:700;
+      line-height:1.5;
+      text-align:center;
+    }
+
+    .secretEnding{
+      margin-top:14px;
+      padding:18px;
+      border-radius:18px;
+      background:linear-gradient(145deg,#fff8de,#fff2f8);
+      border:1px solid #f0dba3;
+      color:#684c18;
+      text-align:center;
+      animation:pop .35s ease;
+    }
+
+    @keyframes pop{
+      from{transform:scale(.96);opacity:0}
+      to{transform:scale(1);opacity:1}
+    }
+
+    .footer{
+      text-align:center;
+      font-size:12px;
+      color:#9993a5;
+      margin-top:17px;
+    }
+
+    .confetti{
+      position:fixed;
+      top:-20px;
+      z-index:100;
+      pointer-events:none;
+      animation:fall linear forwards;
+      font-size:20px;
+    }
+
+    @keyframes fall{
+      to{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:.85;
+      }
+    }
+
+    @media (max-width:520px){
+      .card{padding:24px 20px}
+      .achievements{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<div class="sparkles">
+  <span>✨</span><span>💜</span><span>⭐</span><span>💫</span><span>🌸</span>
+</div>
+
+<section class="card" id="start">
+  <div class="badge">Семейная система проверки</div>
+  <h1>Особое досье: Виктория</h1>
+  <p class="muted">
+    Обнаружен человек с подозрительно высоким уровнем крутости.
+    Требуется дополнительная проверка.
+  </p>
+  <button class="primary" id="startBtn">Запустить проверку</button>
+  <div class="footer">Результаты могут быть слегка предвзяты автором.</div>
+</section>
+
+<section class="card hidden" id="scan">
+  <div class="badge">Анализ профиля</div>
+  <h2>Проверяем данные…</h2>
+  <p class="muted" id="scanText">Инициализация семейного архива</p>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="percent" id="percent">0%</div>
+</section>
+
+<section class="card hidden" id="stats">
+  <div class="badge">Промежуточный отчёт</div>
+  <h2>Есть подозрительные показатели</h2>
+
+  <div class="stat" style="animation-delay:.05s">
+    <div class="statHead"><span>Умение поднимать настроение</span><span>97%</span></div>
+    <div class="track"><div class="fill" style="width:97%"></div></div>
+  </div>
+
+  <div class="stat" style="animation-delay:.18s">
+    <div class="statHead"><span>Красота</span><span>100%</span></div>
+    <div class="track"><div class="fill" style="width:100%"></div></div>
+  </div>
+
+  <div class="stat" style="animation-delay:.31s">
+    <div class="statHead"><span>Уровень вредности</span><span>83%</span></div>
+    <div class="track"><div class="fill" style="width:83%"></div></div>
+  </div>
+
+  <div class="stat" style="animation-delay:.44s">
+    <div class="statHead"><span>Шанс утащить вкусняшку</span><span>91%</span></div>
+    <div class="track"><div class="fill" style="width:91%"></div></div>
+  </div>
+
+  <div class="secretBox">
+    <strong>Скрытый параметр обнаружен:</strong><br>
+    может бесить брата и всё равно оставаться любимой сестрёнкой.
+  </div>
+
+  <button class="primary" id="resultBtn">Показать итог</button>
+</section>
+
+<section class="card hidden" id="final">
+  <div class="badge" id="finalBadge">Проверка завершена</div>
+  <h1 id="finalTitle">Вердикт готов</h1>
+
+  <div class="result">
+    <div class="row"><span>Объект</span><span>Виктория</span></div>
+    <div class="row"><span>Класс</span><span>Family Premium</span></div>
+    <div class="row"><span>Настроение рядом</span><span>заметно лучше</span></div>
+    <div class="row"><span>Вредность</span><span>простительная</span></div>
+    <div class="row"><span>Ссор</span><span>много</span></div>
+    <div class="row"><span>Примирений</span><span>ещё больше</span></div>
+    <div class="row"><span>Шанс отказаться от сестры</span><span>0%</span></div>
+    <div class="row"><span>Статус</span><span>любимая сестрёнка</span></div>
+  </div>
+
+  <div class="note" id="mainNote">
+    Рекомендация системы: продолжать быть собой.
+    Брат иногда может ворчать, но официально считает тебя очень крутой.
+  </div>
+
+  <h3 style="margin-top:22px;">Разблокированные достижения</h3>
+  <div class="achievements">
+    <div class="achievement">
+      <strong>🏆 Пережила брата</strong>
+      <span>Редкое семейное достижение. Уровень сложности: высокий.</span>
+    </div>
+    <div class="achievement">
+      <strong>🍫 Похититель вкусняшек</strong>
+      <span>Подозревается системой. Доказательств недостаточно.</span>
+    </div>
+    <div class="achievement">
+      <strong>😈 Мастер семейных споров</strong>
+      <span>Умеет довести аргумент до уровня «ладно, всё».</span>
+    </div>
+    <div class="achievement">
+      <strong>💜 Семейная легенда</strong>
+      <span>Статус присваивается пожизненно и не подлежит отмене.</span>
+    </div>
+  </div>
+
+  <button class="mystery" id="thoughtBtn">Что брат на самом деле думает?</button>
+  <div class="thought hidden" id="thoughtText">
+    Иногда бесишь. Иногда очень. Но всё равно люблю, куда деваться 😁
+  </div>
+
+  <button class="primary" id="extraBtn">Получить дополнительный вердикт</button>
+  <div class="extra" id="extraText">Нажми — система выдаст ещё один секретный вывод.</div>
+
+  <button class="secondary hidden" id="secretBtn">Секретная кнопка для Виктории</button>
+
+  <div class="secretEnding hidden" id="secretEnding">
+    <div class="badge secret">Секретный уровень</div>
+    <h2>Ладно, признаю официально</h2>
+    <p>
+      Мне повезло с сестрой. Даже если я не всегда это говорю вслух.
+      Так что можешь сохранить этот экран как компромат 😅
+    </p>
+    <strong>Проверка завершена. Виктория остаётся в семье. Без права обжалования.</strong>
+  </div>
+
+  <button class="secondary" onclick="location.reload()">Пройти ещё раз</button>
+
+  <div class="footer">Сделано специально для тебя 💜</div>
+</section>
+
+<script>
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+const start = document.getElementById("start");
+const scan = document.getElementById("scan");
+const stats = document.getElementById("stats");
+const final = document.getElementById("final");
+const bar = document.getElementById("bar");
+const percent = document.getElementById("percent");
+const scanText = document.getElementById("scanText");
+const extraBtn = document.getElementById("extraBtn");
+const extraText = document.getElementById("extraText");
+const secretBtn = document.getElementById("secretBtn");
+const secretEnding = document.getElementById("secretEnding");
+const thoughtBtn = document.getElementById("thoughtBtn");
+const thoughtText = document.getElementById("thoughtText");
+
+let extraClicks = 0;
+
+const scanPhrases = [
+  "Инициализация семейного архива",
+  "Проверка уровня вредности",
+  "Анализ способности смешить окружающих",
+  "Сверка секретных братских данных",
+  "Почти готово…"
+];
+
+document.getElementById("startBtn").addEventListener("click", async () => {
+  start.classList.add("hidden");
+  scan.classList.remove("hidden");
+
+  for (let i = 0; i <= 100; i += 4) {
+    bar.style.width = i + "%";
+    percent.textContent = i + "%";
+    const idx = Math.min(scanPhrases.length - 1, Math.floor(i / 25));
+    scanText.textContent = scanPhrases[idx];
+    await sleep(90);
+  }
+
+  await sleep(450);
+  scan.classList.add("hidden");
+  stats.classList.remove("hidden");
+});
+
+document.getElementById("resultBtn").addEventListener("click", () => {
+  stats.classList.add("hidden");
+  final.classList.remove("hidden");
+
+  // Редкий супер-вердикт
+  if (Math.floor(Math.random() * 10) === 0) {
+    document.getElementById("finalBadge").textContent = "Ошибка системы";
+    document.getElementById("finalTitle").textContent = "Показатели вышли за пределы шкалы";
+    document.getElementById("mainNote").innerHTML =
+      "<strong>Критическое превышение:</strong> уровень крутости Виктории выше допустимого. " +
+      "Система не рассчитана на такие значения.";
+  }
+});
+
+const verdicts = [
+  "Обнаружено: рядом с тобой скучать значительно сложнее.",
+  "Система подтверждает: вредность есть, но она входит в комплектацию.",
+  "Уровень семейной ценности: измерить не удалось — шкала закончилась.",
+  "Ты официально входишь в список людей, которым брат простит почти всё. Почти.",
+  "Вердикт: иногда раздражаешь, но заменить тебя всё равно нельзя.",
+  "Система рекомендует периодически напоминать брату, какая у него классная сестра.",
+  "Проверка завершена: ты намного круче, чем тебе иногда кажется.",
+  "Особый статус: человек, над которым можно смеяться только семье.",
+  "Братский отдел контроля качества: претензии есть, возврат не рассматривается.",
+  "Дополнительный анализ: шанс, что брат гордится тобой больше, чем показывает, подозрительно высокий."
+];
+
+extraBtn.addEventListener("click", () => {
+  const text = verdicts[Math.floor(Math.random() * verdicts.length)];
+  extraText.textContent = text;
+  extraClicks++;
+
+  if (extraClicks >= 3) {
+    secretBtn.classList.remove("hidden");
+  }
+});
+
+thoughtBtn.addEventListener("click", () => {
+  thoughtText.classList.toggle("hidden");
+  thoughtBtn.textContent = thoughtText.classList.contains("hidden")
+    ? "Что брат на самом деле думает?"
+    : "Ладно, скрыть пока 😅";
+});
+
+secretBtn.addEventListener("click", () => {
+  secretBtn.classList.add("hidden");
+  secretEnding.classList.remove("hidden");
+  launchConfetti();
+});
+
+function launchConfetti(){
+  const symbols = ["💜","✨","⭐","🌸","💫","🎉"];
+  for(let i=0;i<42;i++){
+    const el = document.createElement("div");
+    el.className = "confetti";
+    el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    el.style.left = Math.random()*100 + "vw";
+    el.style.animationDuration = (2.8 + Math.random()*2.8) + "s";
+    el.style.animationDelay = (Math.random()*.8) + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6500);
+  }
+}
+</script>
+</body>
+</html>
